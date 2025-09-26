@@ -13,22 +13,12 @@ export class NftsController {
   }
 
   @Get()
-  findAll() {
-    return this.nftsService.findAll();
+  getAllNFts() {
+    return this.nftsService.getAllNFts();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.nftsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNftDto: UpdateNftDto) {
-    return this.nftsService.update(+id, updateNftDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.nftsService.remove(+id);
+  getNftById(@Param('id') id: string) {
+    return this.nftsService.getNftById(+id);
   }
 }

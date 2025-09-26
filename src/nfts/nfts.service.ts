@@ -8,19 +8,27 @@ export class NftsService {
     return 'This action adds a new nft';
   }
 
-  findAll() {
-    return `This action returns all nfts`;
+  getAllNFts() {
+    return { message: 'List of all NFTs', nfts: [] };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} nft`;
+  getNftById(id: number) {
+    return { message: `Details of NFT with id ${id}`, nft: null };
   }
 
-  update(id: number, updateNftDto: UpdateNftDto) {
-    return `This action updates a #${id} nft`;
-  }
+  // findAll() {
+  //   return `This action returns all nfts`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} nft`;
-  }
+  // findOne(id: number) {
+  //   return `This action returns a #${id} nft`;
+  // }
+
+  // update(id: number, updateNftDto: UpdateNftDto) {
+  //   return `This action updates a #${id} nft`;
+  // }
+
+  // remove(id: number) {
+  //   return `This action removes a #${id} nft`;
+  // }
 }
