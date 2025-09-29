@@ -6,6 +6,7 @@ import { AdminModule } from './admin/admin.module';
 import { NftsModule } from './nfts/nfts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { User } from './users/entities/user.entity';
     UsersModule,
     AdminModule,
     NftsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

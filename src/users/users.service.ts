@@ -44,4 +44,8 @@ export class UsersService {
   editUsername(id: number, newUsername: string): Promise<User> {
     return this.userRepository.save({ id, username: newUsername });
   }
+
+  // removeUser(id: number): Promise<void> {
+  //   return this.userRepository.delete(id);
+  // }
 }
