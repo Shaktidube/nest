@@ -14,39 +14,50 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
-    const { name, email, password } = signUpDto;
+    const { sName, sEmail, sPassword } = signUpDto;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(sPassword, 10);
+
+    const oUser = await this.userModel.findOne({ sEmail });
+    if (oUser) {
+      return { message: 'Email already in use' };
+    }
 
     const newUser = new this.userModel({
-      name,
-      email,
-      password: hashedPassword,
+      sName,
+      sEmail,
+      sPassword: hashedPassword,
     });
     await newUser.save();
 
     const token = this.jwtService.sign({
       id: newUser._id,
-      email: newUser.email,
+      email: newUser.sEmail,
     });
     return { message: 'User registered successfully', token };
   }
 
-  async login(email: string, password: string) {
-    const user = await this.userModel.findOne({ email });
+  async login(sEmail: string, sPassword: string) {
+    const user = await this.userModel.findOne({ sEmail });
     if (!user) {
-      throw new Error('Invalid credentials');
+      return { message: 'Invalid credentials' };
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(sPassword, user.sPassword);
+    console.log(isPasswordValid);
     if (!isPasswordValid) {
-      throw new Error('Invalid credentials');
+      return { message: 'Invalid credentials' };
     }
 
     const token = this.jwtService.sign({
       id: user._id,
-      email: user.email,
+      email: user.sEmail,
     });
+    user.isLoggedIn = true;
+    await user.save();
+
     return { message: 'Login successful', token };
   }
 }
+
+// TODO: implement upload file functionality for profile image

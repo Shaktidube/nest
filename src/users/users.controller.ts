@@ -6,10 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Request,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateNameDto, UpdatePasswordDto } from './dto/update-user.dto';
+import { AuthGuard } from './auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -19,39 +23,40 @@ export class UsersController {
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.create(createUserDto);
   }
-
-  @Get()
-  async findAll() {
-    return await this.usersService.findAllUser();
+  @UseGuards(AuthGuard)
+  @Get('get-all-users')
+  async getAllUser(@Request() req) {
+    const userEmail = req.user.email;
+    console.log('admin email :' , userEmail);
+    return await this.usersService.findAllUser(userEmail);
   }
 
-  /**
-   * we have used get decorator with id param to get id from request
-   * so the API URL will be
-   * GET http://localhost:3000/user/:id
-   */
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.usersService.viewUser(+id);
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  async getProfile(@Request() req) {
+    const id = req.user.id;
+    console.log("userId:", id);
+    return await this.usersService.viewUser(id);
   }
 
-  /**
-   * we have used patch decorator with id param to get id from request
-   * so the API URL will be
-   * PATCH http://localhost:3000/user/:id
-   */
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return await this.usersService.updateUser(+id, updateUserDto);
+  @UseGuards(AuthGuard)
+  @Patch('update-username')
+  async update(@Request() req, @Body() updateUserDto: UpdateNameDto) {
+    const id = req.user.id;
+    return await this.usersService.updateUserName(id, updateUserDto);
   }
 
-  /**
-   * we have used Delete decorator with id param to get id from request
-   * so the API URL will be
-   * DELETE http://localhost:3000/user/:id
-   */
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.removeUser(+id);
+  @UseGuards(AuthGuard)
+  @Patch('change-password')
+  async changePassword(@Request() req , @Body() changePasswordDto : UpdatePasswordDto) {
+    const id = req.user.id;
+    return await this.usersService.updatePassword(id, changePasswordDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('logout')
+  logout(@Request() req) {
+    const id = req.user.id;
+    return this.usersService.removeUser(id);
   }
 }
