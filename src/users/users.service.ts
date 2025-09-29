@@ -1,51 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
+// import { InjectRepository } from '@nestjs/typeorm'; --- IGNORE ---  used for postgres
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+// import { Repository } from 'typeorm'; --- IGNORE --- used for postgres
 import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) {}
+  constructor(@InjectModel(User.name) private UserModal: Model<User>) {}
 
   create(createUserDto: CreateUserDto) {
-    const user: User = new User();
-    user.name = createUserDto.name;
-    user.age = createUserDto.age;
-    user.email = createUserDto.email;
-    user.username = createUserDto.username;
-    user.password = createUserDto.password;
-    user.gender = createUserDto.gender;
-    return this.userRepository.save(user);
+    const user = new this.UserModal(createUserDto);
+    return user.save();
   }
 
-  findAllUser(): Promise<User[]> {
-    return this.userRepository.find();
+  findAllUser() {
+    return this.UserModal.find();
   }
 
-  viewUser(id: number): Promise<User[]> {
-    return this.userRepository.findBy({ id });
+  async viewUser(id: number) {
+    const user = await this.UserModal.findById(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
   }
 
-  updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    const user: User = new User();
-    user.name = updateUserDto.name;
-    user.age = updateUserDto.age;
-    user.email = updateUserDto.email;
-    user.username = updateUserDto.username;
-    user.password = updateUserDto.password;
-    user.id = id;
-    return this.userRepository.save(user);
+  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+    return this.UserModal.findByIdAndUpdate(id, updateUserDto, { new: true });
   }
 
-  editUsername(id: number, newUsername: string): Promise<User> {
-    return this.userRepository.save({ id, username: newUsername });
+  editUsername(id: number, newUsername: string) {
+    return this.UserModal.findByIdAndUpdate(id, {
+      username: newUsername,
+    });
   }
 
-  // removeUser(id: number): Promise<void> {
-  //   return this.userRepository.delete(id);
-  // }
+  removeUser(id: number) {
+    return this.UserModal.findByIdAndDelete(id);
+  }
 }

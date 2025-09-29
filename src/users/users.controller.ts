@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -8,13 +16,13 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.create(createUserDto);
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAllUser();
+  async findAll() {
+    return await this.usersService.findAllUser();
   }
 
   /**
@@ -23,8 +31,8 @@ export class UsersController {
    * GET http://localhost:3000/user/:id
    */
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.viewUser(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.usersService.viewUser(+id);
   }
 
   /**
@@ -33,8 +41,8 @@ export class UsersController {
    * PATCH http://localhost:3000/user/:id
    */
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateUser(+id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.usersService.updateUser(+id, updateUserDto);
   }
 
   /**
@@ -42,8 +50,8 @@ export class UsersController {
    * so the API URL will be
    * DELETE http://localhost:3000/user/:id
    */
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.usersService.removeUser(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.usersService.removeUser(+id);
+  }
 }

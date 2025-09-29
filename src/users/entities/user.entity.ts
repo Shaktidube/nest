@@ -1,30 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-@Entity()
+@Schema()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ type: 'varchar', length: 30 })
+  @Prop()
   name: string;
 
-  @Column({ type: 'varchar', length: 15 })
-  username: string;
-
-  @Column({ type: 'varchar', length: 40 })
+  @Prop({ unique: true })
   email: string;
 
-  @Column({ type: 'int' })
-  age: number;
-
-  @Column({ type: 'varchar' })
+  @Prop()
   password: string;
-
-  @Column({ type: 'enum', enum: ['m', 'f', 'u'] })
-  /**
-   * m - male
-   * f - female
-   * u - unspecified
-   */
-  gender: string;
 }
+
+export const UserSchema = SchemaFactory.createForClass(User);
