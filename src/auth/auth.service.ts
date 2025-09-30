@@ -13,6 +13,14 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  signJWtForUser(oUser: any) {
+    // const payload = { id: oUser._id, email: oUser.sEmail };
+    return this.jwtService.sign(
+      { id: oUser._id, email: oUser.sEmail, role: oUser.sRole },
+      { secret: process.env.JWT_SECRET },
+    );
+  }
+
   async signUp(signUpDto: SignUpDto) {
     const { sName, sEmail, sPassword } = signUpDto;
 
@@ -29,12 +37,10 @@ export class AuthService {
       sPassword: hashedPassword,
     });
     await newUser.save();
-
-    const token = this.jwtService.sign({
-      id: newUser._id,
-      email: newUser.sEmail,
-    });
-    return { message: 'User registered successfully', token };
+    
+    const sToken = this.signJWtForUser(newUser);
+    console.log('token:', sToken);
+    return { message: 'User registered successfully', sToken };
   }
 
   async login(sEmail: string, sPassword: string) {
@@ -49,14 +55,12 @@ export class AuthService {
       return { message: 'Invalid credentials' };
     }
 
-    const token = this.jwtService.sign({
-      id: user._id,
-      email: user.sEmail,
-    });
+    const sToken = this.signJWtForUser(user);
+    console.log('token:', sToken);
     user.isLoggedIn = true;
     await user.save();
 
-    return { message: 'Login successful', token };
+    return { message: 'Login successful', sToken };
   }
 }
 
