@@ -18,6 +18,7 @@ import { FILE_UPLOAD_PATH, MAX_FILE_SIZE } from 'src/constant';
 import { diskStorage } from 'multer';
 import { fileNameEditor, imageFileFilter } from 'src/file.utils';
 import { FileCleanupInterceptor } from 'src/interceptors/file-cleanup.interceptor';
+import { User } from 'src/customDecorators/user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -29,8 +30,8 @@ export class UsersController {
   }
   @UseGuards(AuthGuard)
   @Get('get-all-users')
-  async getAllUser(@Request() req) {
-    const userRole = req.user.role;
+  async getAllUser(@User('role') userRole: string) {
+    // const userRole = req.user.role;
     console.log('admin role :', userRole);
     if (userRole !== 'admin') {
       return { message: 'Access denied. Admins only.' };
@@ -40,26 +41,25 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  async getProfile(@Request() req) {
-    const id = req.user.id;
+  async getProfile(@User('id') id: string) {
+    // const id = req.user.id;
     console.log('userId:', id);
     return await this.usersService.viewUser(id);
   }
 
   @UseGuards(AuthGuard)
   @Patch('update-username')
-  async update(@Request() req, @Body() updateUserDto: UpdateNameDto) {
-    const id = req.user.id;
+  async update(@User('id') id: string, @Body() updateUserDto: UpdateNameDto) {
     return await this.usersService.updateUserName(id, updateUserDto);
   }
 
   @UseGuards(AuthGuard)
   @Patch('change-password')
   async changePassword(
-    @Request() req,
+    @User('id') id: string,
     @Body() changePasswordDto: UpdatePasswordDto,
   ) {
-    const id = req.user.id;
+    // const id = req.user.id;
     return await this.usersService.updatePassword(id, changePasswordDto);
   }
 
@@ -93,8 +93,8 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Post('logout')
-  logout(@Request() req) {
-    const id = req.user?.id;
+  logout(@User('id') id: string) {
+    // const id = req.user?.id;
     return this.usersService.logout(id);
   }
 }
