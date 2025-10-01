@@ -14,6 +14,9 @@ export class User {
   @Prop({ enum: ['user', 'admin'], default: 'user' })
   sRole: string;
 
+  @Prop()
+  sToken: string;
+
   @Prop({
     type: String,
     default: 'https://www.w3schools.com/howto/img_avatar.png',

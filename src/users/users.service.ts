@@ -9,6 +9,7 @@ import { Model } from 'mongoose';
 import bcrypt from 'node_modules/bcryptjs';
 import * as fs from 'fs';
 import { PinataSDK } from 'pinata';
+import { Socket } from 'socket.io';
 @Injectable()
 export class UsersService {
   private pinata: PinataSDK;
@@ -29,7 +30,7 @@ export class UsersService {
   }
 
   async viewUser(id: string) {
-    const user = await this.UserModal.findById({ _id: id });
+    const user = await this.UserModal.findOne({ _id: id, isLoggedIn: true });
     if (!user) {
       throw new Error('User not found');
     }
@@ -39,7 +40,15 @@ export class UsersService {
   async updateUserName(id: string, updateUserDto: UpdateNameDto) {
     console.log('id:', id);
     console.log('updateUserDto:', updateUserDto);
-    return this.UserModal.findByIdAndUpdate(id, updateUserDto, { new: true });
+    // return this.UserModal.findAndUpdate(id, updateUserDto, { new: true });
+
+    const oUser = await this.UserModal.findOne({ _id: id, isLoggedIn: true });
+    if (!oUser) {
+      throw new Error('User not found');
+    }
+    return this.UserModal.findByIdAndUpdate(id, {
+      sName: updateUserDto.sName,
+    });
   }
 
   async changeProfileImage(file: any, id: string) {
@@ -48,7 +57,7 @@ export class UsersService {
     console.log('file path:', file.path);
     console.log(" file's original name:", file.originalname);
     console.log(" file's mimetype:", file.mimetype);
-    const oUser = await this.UserModal.findById({ _id: id });
+    const oUser = await this.UserModal.findOne({ _id: id, isLoggedIn: true });
     if (!oUser) {
       throw new Error('User not found');
     }
@@ -87,11 +96,11 @@ export class UsersService {
       return { message: 'newPassword and Confirm Password does not match' };
     }
 
-    const user = await this.UserModal.findByIdAndUpdate(id, {
+    const oUser = await this.UserModal.findByIdAndUpdate(id, {
       sPassword: hashedPassword,
     });
 
-    return { message: 'Password changed successfully', user };
+    return { message: 'Password changed successfully' };
   }
 
   editUsername(id: string, newUsername: string) {
@@ -100,7 +109,14 @@ export class UsersService {
     });
   }
 
-  removeUser(id: string) {
+  async logout(id: string) {
+    const oUser = await this.UserModal.findOne({ _id: id, isLoggedIn: true });
+    if (!oUser) {
+      throw new Error('User not found');
+    }
+    oUser.isLoggedIn = false;
+    oUser.sToken = '';
+    await oUser.save();
     return { message: 'User logged out successfully' };
   }
 }

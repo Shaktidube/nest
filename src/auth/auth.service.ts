@@ -37,10 +37,18 @@ export class AuthService {
       sPassword: hashedPassword,
     });
     await newUser.save();
-    
-    const sToken = this.signJWtForUser(newUser);
-    console.log('token:', sToken);
-    return { message: 'User registered successfully', sToken };
+
+    // const adminUser = new this.userModel({
+    //   sName: 'Admin',
+    //   sEmail: 'admin@gmail.com',
+    //   sPassword: await bcrypt.hash('admin123', 10),
+    //   sRole: 'admin',
+    // });
+    // await adminUser.save();
+
+    // const sToken = this.signJWtForUser(newUser);
+    // console.log('token:', sToken);
+    return { message: 'User registered successfully', user: newUser };
   }
 
   async login(sEmail: string, sPassword: string) {
@@ -60,8 +68,17 @@ export class AuthService {
     user.isLoggedIn = true;
     await user.save();
 
-    return { message: 'Login successful', sToken };
+    return { message: 'Login successfully', sToken };
+  }
+
+  async logout(id: string) {
+    const oUser = await this.userModel.findById({ _id: id });
+    if (!oUser) {
+      throw new Error('User not found');
+    }
+    oUser.isLoggedIn = false;
+    oUser.sToken = '';
+    await oUser.save();
+    return { message: 'User logged out successfully' };
   }
 }
-
-// TODO: implement upload file functionality for profile image

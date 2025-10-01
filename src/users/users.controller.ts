@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Patch,
-  Delete,
   UseGuards,
   Request,
   UseInterceptors,
@@ -93,9 +92,9 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard)
-  @Delete('logout')
+  @Post('logout')
   logout(@Request() req) {
     const id = req.user?.id;
-    return this.usersService.removeUser(id);
+    return this.usersService.logout(id);
   }
 }

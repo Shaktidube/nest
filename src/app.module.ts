@@ -13,6 +13,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from './constant';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { FileCleanupInterceptor } from './interceptors/file-cleanup.interceptor';
+import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { FileCleanupInterceptor } from './interceptors/file-cleanup.interceptor'
   providers: [
     AppService,
     { provide: APP_INTERCEPTOR, useClass: FileCleanupInterceptor },
+    ChatGateway,
   ],
 })
 export class AppModule {}
