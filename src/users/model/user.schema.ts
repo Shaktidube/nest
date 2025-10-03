@@ -3,16 +3,19 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 @Schema()
 export class User {
   @Prop()
-  sName: string;
+  sWalletAddress: string;
 
   @Prop({ unique: true })
   sEmail: string;
 
   @Prop()
-  sPassword: string;
+  nOtp: number;
 
-  @Prop({ enum: ['user', 'admin'], default: 'user' })
-  sRole: string;
+  @Prop({ default: null })
+  nOtpExpiryTime: number;
+
+  @Prop({ default: false })
+  isEmailVerified: boolean;
 
   @Prop()
   sToken: string;
@@ -21,10 +24,10 @@ export class User {
     type: String,
     default: 'https://www.w3schools.com/howto/img_avatar.png',
   })
-  sProfileImage: string;
+  sUserProfileImage: string;
 
   @Prop({ default: false })
-  isLoggedIn: boolean;
+  sUsername: string;
 
   @Prop({ default: Date.now })
   dCreatedAt: Date;

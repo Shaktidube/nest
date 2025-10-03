@@ -4,9 +4,8 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-// import { ChatService } from './chat.service';
 
-@WebSocketGateway({ cors: { origin: '*' } }) // enable CORS for frontend testing
+@WebSocketGateway({ cors: { origin: '*' } })
 export class ChatGateway {
   private messages: { userId: string; message: string }[] = [];
 

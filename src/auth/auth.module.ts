@@ -2,24 +2,28 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from 'src/users/entities/user.entity';
+import { UserSchema } from 'src/users/model/user.schema';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { UsersModule } from 'src/users/users.module';
 import { UsersService } from 'src/users/users.service';
-
+import { MailModule } from 'src/mail/mail.module';
+import { NftsModule } from 'src/nfts/nfts.module';
+import { ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
-      useFactory: () => ({
-        secret: process.env.JWT_SECRET || 'nestjsssss',
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: process.env.JWT_EXPIRES || '3d',
+          expiresIn: configService.get<string>('JWT_EXPIRES'),
         },
       }),
+      inject: [ConfigService],
     }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MailModule,
+    NftsModule,
   ],
   exports: [JwtModule],
   controllers: [AuthController],

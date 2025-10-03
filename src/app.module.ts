@@ -7,13 +7,17 @@ import { NftsModule } from './nfts/nfts.module';
 // import { TypeOrmModule } from '@nestjs/typeorm';
 // import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { MulterModule } from '@nestjs/platform-express';
-import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from './constant';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { FileCleanupInterceptor } from './interceptors/file-cleanup.interceptor';
-import { ChatGateway } from './chat/chat.gateway';
+// import { ChatGateway } from './chat/chat.gateway';
+import config from './config/config';
+import { DatabaseModule } from './DbConfig/db.module';
+import { AppGateway } from './nfts/eventTracker/events';
+import { NftsEventsService } from './nfts/eventTracker/eventsMethods';
+import { ContractInstanceModule } from './nfts/eventTracker/contractInstance.module';
+import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from './utils/file.validation';
 
 @Module({
   imports: [
@@ -30,8 +34,9 @@ import { ChatGateway } from './chat/chat.gateway';
         }
       },
     }),
-    ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.DB_URL as string),
+    ConfigModule.forRoot({ isGlobal: true, load: [config] }),
+    DatabaseModule,
+    ContractInstanceModule,
     UsersModule,
     AdminModule,
     NftsModule,
@@ -40,8 +45,9 @@ import { ChatGateway } from './chat/chat.gateway';
   controllers: [AppController],
   providers: [
     AppService,
+    AppGateway,
+    NftsEventsService,
     { provide: APP_INTERCEPTOR, useClass: FileCleanupInterceptor },
-    ChatGateway,
   ],
 })
 export class AppModule {}

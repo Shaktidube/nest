@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AppService {
-  getServer(): string {
-    return `server is running on port ${process.env.PORT || 3000}`;
-  }
+  constructor(private config: ConfigService) {}
 }
