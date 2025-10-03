@@ -1,98 +1,210 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NEST Project
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A NestJS-based backend for an NFT marketplace.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📁 Project Structure
 
-## Description
+<details>
+<summary><strong>🗂️ nft-marketplace-backend</strong></summary>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+<details>
+<summary><strong>📂 src/</strong></summary>
 
-## Project setup
+<details>
+<summary><strong>📂 config/</strong></summary>
 
-```bash
-$ npm install
-```
+&nbsp;&nbsp;&nbsp;&nbsp;- `config.ts` - Application configuration and environment setup
 
-## Compile and run the project
+</details>
 
-```bash
-# development
-$ npm run start
+<details>
+<summary><strong>📂 DbConfig/</strong></summary>
 
-# watch mode
-$ npm run start:dev
+&nbsp;&nbsp;&nbsp;&nbsp;- `db.module.ts` - Database configuration and connection setup
 
-# production mode
-$ npm run start:prod
-```
+</details>
 
-## Run tests
+<details>
+<summary><strong>📂 interceptors/</strong></summary>
 
-```bash
-# unit tests
-$ npm run test
+&nbsp;&nbsp;&nbsp;&nbsp;- `file-cleanup.interceptor.ts` - HTTP interceptors for file cleanup
 
-# e2e tests
-$ npm run test:e2e
+</details>
 
-# test coverage
-$ npm run test:cov
-```
+<details>
+<summary><strong>📂 customDecorators/</strong></summary>
 
-## Deployment
+&nbsp;&nbsp;&nbsp;&nbsp;- Custom NestJS decorators for enhanced functionality
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+</details>
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+<details>
+<summary><strong>📂 mail/</strong></summary>
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+&nbsp;&nbsp;&nbsp;&nbsp;- `mail.service.ts` - Email sending service  
+&nbsp;&nbsp;&nbsp;&nbsp;- `mail.module.ts` - Email module configuration
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+</details>
 
-## Resources
+<details>
+<summary><strong>📂 utils/</strong></summary>
 
-Check out a few resources that may come in handy when working with NestJS:
+&nbsp;&nbsp;&nbsp;&nbsp;- Utility functions and helpers for common operations
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+</details>
 
-## Support
+<details>
+<summary><strong>📂 admin/</strong></summary>
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+&nbsp;&nbsp;&nbsp;&nbsp;- `admin.controller.ts` - Admin API endpoints  
+&nbsp;&nbsp;&nbsp;&nbsp;- `admin.service.ts` - Admin business logic  
+&nbsp;&nbsp;&nbsp;&nbsp;- `admin.module.ts` - Admin module configuration
 
-## Stay in touch
+</details>
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+<details>
+<summary><strong>📂 auth/</strong></summary>
 
-## License
+<details>
+<summary><strong>📂 models/</strong></summary>
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- user database schemas and data models
+
+</details>
+
+<details>
+<summary><strong>📂 dto/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- `create-user.dto.ts` - user creation DTO  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- `mint-nft.dto.ts` -  Update user DTO
+
+</details>
+
+&nbsp;&nbsp;&nbsp;&nbsp;- `auth.controller.ts` - Authentication endpoints  
+&nbsp;&nbsp;&nbsp;&nbsp;- `auth.service.ts` - Authentication logic  
+&nbsp;&nbsp;&nbsp;&nbsp;- `auth.module.ts` - Auth module setup  
+&nbsp;&nbsp;&nbsp;&nbsp;- `auth.guard.ts` - JWT authentication guard
+
+</details>
+
+<details>
+<summary><strong>📂 users/</strong></summary>
+
+<details>
+<summary><strong>📂 models/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- User database schemas and data models
+
+</details>
+
+<details>
+<summary><strong>📂 dto/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- `create-user.dto.ts` - user creation DTO  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- `update-user.dto.ts` - update user DTO
+
+</details>
+
+&nbsp;&nbsp;&nbsp;&nbsp;- `users.controller.ts` - User API endpoints  
+&nbsp;&nbsp;&nbsp;&nbsp;- `users.service.ts` - User business logic  
+&nbsp;&nbsp;&nbsp;&nbsp;- `users.module.ts` - User module configuration  
+&nbsp;&nbsp;&nbsp;&nbsp;- `user.entity.ts` - User data model
+
+</details>
+
+<details>
+<summary><strong>📂 nfts/</strong></summary>
+
+<details>
+<summary><strong>📂 models/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- NFT database schemas and data models
+
+</details>
+
+<details>
+<summary><strong>📂 dto/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- `create-nft.dto.ts` - NFT creation DTO  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- `mint-nft.dto.ts` - NFT minting DTO
+
+</details>
+
+<details>
+<summary><strong>📂 eventsMethods/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Blockchain event handlers and processors
+
+</details>
+
+<details>
+<summary><strong>📂 eventTracker/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Real-time event tracking and monitoring
+
+</details>
+
+&nbsp;&nbsp;&nbsp;&nbsp;- `nfts.controller.ts` - NFT API endpoints  
+&nbsp;&nbsp;&nbsp;&nbsp;- `nfts.service.ts` - NFT business logic  
+&nbsp;&nbsp;&nbsp;&nbsp;- `nfts.module.ts` - NFT module configuration
+
+</details>
+
+<details>
+<summary><strong>📂 abis/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;- `mediaAbi.ts` - Media contract ABI  
+&nbsp;&nbsp;&nbsp;&nbsp;- `mintAbi.ts` - Minting contract ABI
+
+</details>
+
+<details>
+<summary><strong>📂 contractInstance/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;- Blockchain contract instances and interactions  
+&nbsp;&nbsp;&nbsp;&nbsp;- Contract service providers
+
+</details>
+
+<details>
+<summary><strong>📂 chat/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;- `chat.gateway.ts` - WebSocket gateway  
+&nbsp;&nbsp;&nbsp;&nbsp;- `chat.module.ts` - Chat module configuration
+
+</details>
+
+&nbsp;&nbsp;&nbsp;&nbsp;- `app.controller.ts` - Main application controller  
+&nbsp;&nbsp;&nbsp;&nbsp;- `app.module.ts` - Root application module  
+&nbsp;&nbsp;&nbsp;&nbsp;- `app.service.ts` - Main application service  
+&nbsp;&nbsp;&nbsp;&nbsp;- `main.ts` - Application entry point
+
+</details>
+
+<details>
+<summary><strong>📂 test/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;- Test files and configurations
+
+</details>
+
+<details>
+<summary><strong>📂 uploads/</strong></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;- Temporary file storage for NFT media uploads
+
+</details>
+
+&nbsp;&nbsp;&nbsp;&nbsp;- `.env` - Environment variables  
+&nbsp;&nbsp;&nbsp;&nbsp;- `.env.example` - Environment variables template  
+&nbsp;&nbsp;&nbsp;&nbsp;- `.gitignore` - Git ignore rules  
+&nbsp;&nbsp;&nbsp;&nbsp;- `.prettierrc` - Code formatting configuration  
+&nbsp;&nbsp;&nbsp;&nbsp;- `eslint.config.mjs` - ESLint configuration  
+&nbsp;&nbsp;&nbsp;&nbsp;- `nest-cli.json` - NestJS CLI configuration  
+&nbsp;&nbsp;&nbsp;&nbsp;- `package.json` - Project dependencies and scripts  
+&nbsp;&nbsp;&nbsp;&nbsp;- `package-lock.json` - Dependency lock file  
+&nbsp;&nbsp;&nbsp;&nbsp;- `README.md` - Project documentation  
+&nbsp;&nbsp;&nbsp;&nbsp;- `tsconfig.json` - TypeScript configuration  
+&nbsp;&nbsp;&nbsp;&nbsp;- `tsconfig.build.json` - TypeScript build configuration
+
+</details>
