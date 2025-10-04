@@ -5,6 +5,8 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  Request,
+  Get,
 } from '@nestjs/common';
 import { NftsService } from './nfts.service';
 import { AuthGuard } from 'src/users/auth.guard';
@@ -50,6 +52,24 @@ export class NftsController {
       mintNftDto.nRoyalty,
       mintNftDto.sTokenAddress,
     );
+  }
+  @Get('nft-detail')
+  async getNftById(@Request() req) {
+    const id = req.query.id;
+    console.log('id :', id);
+    if (!id) {
+      return { message: 'NFT ID is required', nft: null };
+    }
+    return this.nftsService.getNftById(id);
+  }
+
+  @Get('get-all-nfts')
+  async getAllNfts(@Request() req) {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    console.log('page, limit, skip :', page, limit, skip);
+    return this.nftsService.getAllNFts(page, limit, skip);
   }
   // @Post()
   // create(@Body() createNftDto: CreateNftDto) {

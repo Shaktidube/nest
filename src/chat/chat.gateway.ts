@@ -1,56 +1,47 @@
 import {
   WebSocketGateway,
-  SubscribeMessage,
   WebSocketServer,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { Logger } from '@nestjs/common';
 
-@WebSocketGateway({ cors: { origin: '*' } })
-export class ChatGateway {
-  private messages: { userId: string; message: string }[] = [];
-
+@WebSocketGateway(4001, {
+  cors: {
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST'],
+  },
+})
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
+  private readonly logger = new Logger(ChatGateway.name);
+
+  // Handle new client connections
   handleConnection(client: Socket) {
-    console.log('Client connected:', client.id);
+    this.logger.log(`Client connected: ${client.id}`);
 
-    client.broadcast.emit('user-joined', {
-      messsage: `new user joined the chat ${client.id}`,
+    // Emit connection success message
+    client.emit('connection_success', {
+      message: 'Connected to NestJS WebSocket server!',
+      clientId: client.id,
     });
   }
 
+  // Handle client disconnections
   handleDisconnect(client: Socket) {
-    console.log('Client disconnected:', client.id);
-
-    this.server.emit('user-left', {
-      messsage: `new user left the chat ${client.id}`,
-    });
+    this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  @SubscribeMessage('newMessage')
-  handleNewMessage(client: Socket, payload: string) {
-    console.log('New message received:', payload);
-    client.broadcast.emit('message', payload);
+  // Optional: Add custom methods for your application
+  // sendMessageToClient(clientId: string, message: any) {
+  //   this.server.to(clientId).emit('message', message);
+  // }
+
+  // Broadcast to all connected clients
+  broadcastMessage(event: string, message: any) {
+    this.server.emit(event, message);
   }
-
-  // @SubscribeMessage('joinRoom')
-  // handleJoinRoom(client: Socket, room: string) {
-  //   client.join(room);
-  //   console.log(`${client.id} joined room: ${room}`);
-  //   this.server.to(room).emit('roomNotice', `${client.id} joined`);
-  // }
-
-  // @SubscribeMessage('chatMessage')
-  // handleChatMessage(
-  //   client: Socket,
-  //   payload: { userId: string; message: string },
-  // ) {
-  //   // const saved = await this.chatService.sendMessage(payload.userId, payload.message);
-  //   const newMessage = { userId: payload.userId, message: payload.message };
-  //   // Here you can also save to MongoDB if needed
-  //   this.messages.push(newMessage);
-  //   // Broadcast to all in "grp"
-  //   this.server.to('grp').emit('newMessage', newMessage);
-  // }
 }

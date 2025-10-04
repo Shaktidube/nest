@@ -18,6 +18,7 @@ import { AppGateway } from './nfts/eventTracker/events';
 import { NftsEventsService } from './nfts/eventTracker/eventsMethods';
 import { ContractInstanceModule } from './nfts/eventTracker/contractInstance.module';
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from './utils/file.validation';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from './utils/file.validation';
     ConfigModule.forRoot({ isGlobal: true, load: [config] }),
     DatabaseModule,
     ContractInstanceModule,
+    ChatModule,
     UsersModule,
     AdminModule,
     NftsModule,

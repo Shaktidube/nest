@@ -65,7 +65,7 @@ export class AuthController {
     );
   }
 
-  @Patch('verify-email')
+  @Patch('resend-otp')
   async resendOtp(@Body() verifyEmailDto: VerifyEmailDto) {
     return await this.authService.verifyEmail(
       verifyEmailDto.sWalletAddress,

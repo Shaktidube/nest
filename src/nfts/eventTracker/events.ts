@@ -1,5 +1,5 @@
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import {
   Injectable,
   Logger,
@@ -9,13 +9,16 @@ import {
 import { NftsEventsService } from './eventsMethods';
 import { ContractService } from './contractInstance';
 
-@WebSocketGateway()
+@WebSocketGateway(4001, {
+  cors: {
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST'],
+  },
+})
 @Injectable()
 export class AppGateway implements OnModuleInit, OnModuleDestroy {
-  // These are from @nestjs/common
   @WebSocketServer()
   server: Server;
-
   private readonly logger = new Logger(AppGateway.name);
   // private eventListeners: any[] = []; // To track event listeners for cleanup
 
@@ -37,6 +40,7 @@ export class AppGateway implements OnModuleInit, OnModuleDestroy {
   private setupContractListeners() {
     try {
       const contract = this.contractService.getMintContract();
+      console.log('Mint contract:', contract.target);
       console.log('Setting up contract event listeners');
 
       // Listen for Transfer events

@@ -72,13 +72,48 @@ export class NftsService {
     console.log('Metadata uploaded to Pinata:', metadataUpload);
     return {
       message: 'File uploaded successfully',
-      url: {
+      data: {
         sTokenAddress: metadata.TokenAddress,
         sNftName: metadata.name,
         sDescription: metadata.description,
         sImageUrl: responseData.url,
         sMetadataUrl: `https://gateway.pinata.cloud/ipfs/${metadataUpload.cid}`,
       },
+    };
+  }
+
+  async getNftById(id: string) {
+    console.log('id :', id);
+
+    const nft = await this.NftModal.findById(id);
+    if (!nft) {
+      return { message: 'NFT not found', nft: null };
+    }
+    return { message: 'NFT retrieved successfully', nft: nft };
+  }
+
+  async getAllNFts(page: number, limit: number, skip: number) {
+    console.log('page, limit, skip :', page, limit, skip);
+
+    const nfts = await this.NftModal.find()
+      .skip(skip)
+      .limit(limit)
+      .sort({ updatedAt: -1 });
+    if (nfts.length === 0) {
+      return {
+        message: 'No NFTs found',
+        nfts: nfts,
+        page: page,
+        totalPages: 0,
+        totalNfts: 0,
+      };
+    }
+    return {
+      message: 'NFTs retrieved successfully',
+      nfts: nfts,
+      page: page,
+      totalPages: Math.ceil((await this.NftModal.countDocuments()) / limit),
+      totalNfts: await this.NftModal.countDocuments(),
     };
   }
   // create(createNftDto: CreateNftDto) {

@@ -66,7 +66,7 @@ export class UsersService {
     })
       .skip(skip)
       .limit(limits)
-      .sort({ createdAt: -1 });
+      .sort({ updatedAt: -1 });
 
     if (nfts.length === 0) {
       return {
@@ -83,6 +83,51 @@ export class UsersService {
         }),
       };
     }
+
+    return {
+      message: 'NFTs retrieved',
+      nfts: nfts,
+      page: page,
+      totalPages: Math.ceil(
+        (await this.NftModal.countDocuments({
+          sCurrentOwner: oUser.sWalletAddress,
+        })) / limits,
+      ),
+      totalNfts: await this.NftModal.countDocuments({
+        sCurrentOwner: oUser.sWalletAddress,
+      }),
+    };
+  }
+
+  async changeProfileImage(file: any, sToken: string) {
+    console.log('sToken:', sToken);
+    console.log('file:', file);
+    console.log('file path:', file.path);
+    console.log(" file's original name:", file.originalname);
+    console.log(" file's mimetype:", file.mimetype);
+    const oUser = await this.UserModal.findOne({
+      sToken: sToken,
+      isEmailVerified: true,
+    });
+    if (!oUser) {
+      throw new Error('User not found');
+    }
+
+    const blob = new Blob([fs.readFileSync(file.path)]);
+    const newFile = new File([blob], file.originalname, {
+      type: file.mimetype,
+    });
+    const upload = await this.pinata.upload.public.file(newFile);
+    console.log('File uploaded to Pinata:', upload);
+
+    oUser.sUserProfileImage = `https://gateway.pinata.cloud/ipfs/${upload.cid}`;
+    await oUser.save();
+    return this.UserModal.findOneAndUpdate(
+      { sToken },
+      {
+        sUserProfileImage: oUser.sUserProfileImage,
+      },
+    );
   }
 
   // async findAllUser(userRole: string) {
@@ -108,31 +153,6 @@ export class UsersService {
   //   }
   //   return this.UserModal.findByIdAndUpdate(id, {
   //     sName: updateUserDto.sName,
-  //   });
-  // }
-
-  // async changeProfileImage(file: any, id: string) {
-  //   console.log('id:', id);
-  //   console.log('file:', file);
-  //   console.log('file path:', file.path);
-  //   console.log(" file's original name:", file.originalname);
-  //   console.log(" file's mimetype:", file.mimetype);
-  //   const oUser = await this.UserModal.findOne({ _id: id, isLoggedIn: true });
-  //   if (!oUser) {
-  //     throw new Error('User not found');
-  //   }
-
-  // const blob = new Blob([fs.readFileSync(file.path)]);
-  // const newFile = new File([blob], file.originalname, {
-  //   type: file.mimetype,
-  // });
-  // const upload = await this.pinata.upload.public.file(newFile);
-  // console.log('File uploaded to Pinata:', upload);
-
-  //   oUser.sProfileImage = `https://gateway.pinata.cloud/ipfs/${upload.cid}`;
-  //   await oUser.save();
-  //   return this.UserModal.findByIdAndUpdate(id, {
-  //     sProfileImage: oUser.sProfileImage,
   //   });
   // }
 
